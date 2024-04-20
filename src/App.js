@@ -3,9 +3,6 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Textform from "./components/Textform";
 import Alert from "./components/Alert";
-// import About from "./components/About";
-
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // light mode fave icon
 document.title = "pratik - light Mode";
