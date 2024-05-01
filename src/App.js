@@ -1,55 +1,44 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Outlet, createBrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import WordsTranslate from "./components/WordsTranslate";
 import About from "./components/About";
-import ReactDOM from "react-dom/client";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const App = () => {
-  const [mode, setmode] = useState("light");
-  const [alert, setalert] = useState(null);
+  const [mode, setmode] = useState("light"); 
   
   const [mystyle, setmystyle] = useState({
     color: "black",
     backgroundColor: "white",
-  });
-  const showalert = (message, type) => {
-    setalert({
-      message: message,
-      type: type,
-    });
-    setTimeout(() => {
-      setalert(null);
-    }, 1500);
-  };
+  }); 
+  
   let enable = () => {
     if (mystyle.color === "white") {
       setmystyle({
         color: "black",
         backgroundColor: "white",
       });
-      showalert(" light mode", "success ");
       setmode("light");
     } else {
       setmystyle({
         color: "white",
         backgroundColor: "black",
       });
-      showalert(" Dark mode", "success ");
       setmode("dark");
     }
   };
 
   return (
-    <div>
+    <div className={`bg-${mode} text-${mystyle.color}`} >
       <Navbar
         title="Translater"
-        aboutText="About us"
         toggelstyle={enable}
         mode={mode}
       />
-      <Outlet />
+      <Outlet/>
     </div>
   );
 };

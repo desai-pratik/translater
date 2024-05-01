@@ -2,21 +2,21 @@
 import React, { useState } from "react";
 
 export default function TextForm(props) {
+  const [text, setText] = useState("");
+
   const handalupperclick = () => {
-    const newtext = text.toUpperCase();
-    setText(newtext);
-    props.showalert('convert to uppercase', "success" )
+    setText(text.toUpperCase());
+    props.showalert("convert to uppercase", "success");
   };
 
   const handalowerclick = () => {
-    const newtext = text.toLowerCase();
-    setText(newtext);
-    props.showalert('convert to lowercase', "success" )
+    setText(text.toLowerCase());
+    props.showalert("convert to lowercase", "success");
   };
 
-  const clearclick = () => { 
+  const clearclick = () => {
     setText("");
-    props.showalert('Text Clare', "success" )
+    props.showalert("Text Clare", "success");
   };
 
   const henddalonchange = (event) => {
@@ -24,54 +24,56 @@ export default function TextForm(props) {
   };
 
   const copytext = () => {
-    var text  = document.getElementById("mybox")
-    navigator.clipboard.writeText(text.value) 
-    props.showalert('copy text', "success")
+    var text = document.getElementById("mybox");
+    navigator.clipboard.writeText(text.value);
+    props.showalert("copy text", "success");
   };
 
   const removespace = () => {
-    var newtext  = text.split(/[ ]+/);
-    setText(newtext.join(" "))
-    props.showalert('Remove space', "success")
+    var newtext = text.split(/[ ]+/);
+    setText(newtext.join(" "));
+    props.showalert("Remove space", "success");
   };
 
-  const [text, setText] = useState(" ");
   return (
     <>
-      <div className="form-floating container mt-5 mb-3">
+      <div className="container mt-5 mb-3">
         <h3>{props.heading}</h3>
-        <div className="form-floating">
+        <div className="d-flex mb-3 gap-3">
           <textarea
-            className="form-control mb-3" 
+            className="form-control"
             id="mybox"
+            placeholder="Enter Your Text."
+            rows="8"
             value={text}
-            onChange={henddalonchange}
-            style={{backgroundColor: props.mode === 'light' ? 'white': 'black' ,color: props.mode === 'light' ? 'black': 'white'}}
-          ></textarea>
+            onChange={henddalonchange} 
+          ></textarea> 
         </div>
-        <button onClick={handalupperclick} className="btn btn-primary mx-2">
+       <div className="d-flex gap-2">
+       <button onClick={handalupperclick} className="btn btn-primary w-100">
           uppercase
         </button>
-        <button onClick={handalowerclick} className="btn btn-primary mx-2">
+        <button onClick={handalowerclick} className="btn btn-primary w-100">
           lowercase
         </button>
-        <button onClick={clearclick} className="btn btn-primary mx-2">
-        clear
+        <button onClick={clearclick} className="btn btn-primary w-100">
+          clear
         </button>
-        <button onClick={copytext} className="btn btn-primary mx-2">
-        copy text
+        <button onClick={copytext} className="btn btn-primary w-100">
+          copy text
         </button>
-        <button onClick={removespace} className="btn btn-primary mx-2">
-        remove extra space
+        <button onClick={removespace} className="btn btn-primary w-100">
+          remove extra space
         </button>
+       </div>
       </div>
+
       <div className="container">
         <h3>Your Text summary</h3>
-        <p>{text.split(" ").length-2} words and {text.length} characters</p>
-        <p>{0.008 * text.split(" ").length} minutes read</p>
-        <h4>priview</h4>
-        <p>{text}</p>
-        <hr /> <hr />
+        <p>
+          {text.split(" ").length} words and {text.length} characters
+        </p>
+        <p>{0.008 * text.split(" ").length} minutes read</p> 
       </div>
     </>
   );

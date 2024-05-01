@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import Alert from "./Alert";
 import TextForm from "./Textform";
 
-const WordsTranslate = () => {
-  const [mode, setmode] = useState("light");
+const WordsTranslate = () => { 
   const [alert, setalert] = useState(null);
 
   const showalert = (message, type) => {
@@ -19,7 +18,7 @@ const WordsTranslate = () => {
   return (
     <div>
       <Alert alert={alert} />
-      <TextForm showalert={showalert} heading="Translate Form" mode={mode} />
+      <TextForm showalert={showalert} heading="Translate Form" />
     </div>
   );
 };

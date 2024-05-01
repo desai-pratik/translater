@@ -1,15 +1,16 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 export default function Navbar(props) {
   return (
     <>
       <nav
-        className={`navbar border-bottom navbar-expand-lg navbar-${props.mode}`}
+        className={`navbar border-bottom navbar-expand-md navbar-${props.mode} bg-${props.mode}`}
       >
         <div className="container-fluid px-5">
-          <span className="navbar-brand">{props.title}</span>
+          <Link className="navbar-brand" to="/">
+            {props.title}
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -24,12 +25,12 @@ export default function Navbar(props) {
           <div className="collapse navbar-collapse" id="navbarScroll">
             <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
               <li className="nav-item mx-2">
-                <Link className="" to="/">
+                <Link className=" nav-link" to="/">
                   Home
                 </Link>
               </li>
               <li className="nav-item mx-2">
-                <Link className="" to="/words-translate">
+                <Link className=" nav-link" to="/words-translate">
                   Words
                 </Link>
               </li>
@@ -48,12 +49,3 @@ export default function Navbar(props) {
     </>
   );
 }
-
-Navbar.propTypes = {
-  title: PropTypes.string.isRequired,
-  aboutText: PropTypes.string.isRequired,
-};
-Navbar.defaultProps = {
-  title: "desai",
-  aboutText: "contact us",
-};

@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from "react";
+import Alert from "./Alert";
 
-export default function About() {
+export default function About(props) {
   const [text, setText] = useState("");
   const [translatedText, setTranslatedText] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("gu");
   const [inputLanguage, setInputLanguage] = useState("en");
   const [language, setLanguage] = useState([]);
   const [inputfirstLanguage, setInputfirstLanguage] = useState("");
+  const [alert, setalert] = useState(null);
 
   useEffect(() => {
-    const fetchLanguages = async () => {
-      const response = await fetch(
-        "https://thingproxy.freeboard.io/fetch/https://en.wikipedia.org/w/api.php?action=query&meta=siteinfo&siprop=languages&format=json"
-      );
-      const data = await response.json();
-      const langList = data.query.languages;
-      setLanguage(langList);
+    const fetchData = async () => {
+      try {
+        const apiKey = "AIzaSyCV6g5mtMKjpf5NWdfkYhLRHBHqSV6Qq8c";
+        const url = `https://translation.googleapis.com/language/translate/v2/languages?key=${apiKey}&target=en`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setLanguage(data.data.languages);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-    fetchLanguages();
+
+    fetchData();
   }, []);
 
   // translet button click
@@ -28,16 +34,15 @@ export default function About() {
     const data = await response.json();
     setTranslatedText(data.responseData.translatedText);
   };
-  // input type
+
+  // get input suggetion
   const typeInput = async (e) => {
     setText(e.target.value);
     const response = await fetch(
-      `https://api.mymemory.translated.net/get?q=${text}&langpair=en|${inputLanguage}`
+      `https://api.mymemory.translated.net/get?q=${e.target.value}&langpair=en|${inputLanguage}`
     );
     const data = await response.json();
-    if (inputLanguage !== "en") {
-      setInputfirstLanguage(data.responseData.translatedText);
-    }
+    setInputfirstLanguage(data.responseData.translatedText);
   };
 
   // click suggection
@@ -45,6 +50,7 @@ export default function About() {
     setText(inputfirstLanguage);
     setInputfirstLanguage("");
   };
+
   // replace Language click button
   const replaceLanguage = () => {
     setSelectedLanguage(inputLanguage);
@@ -53,9 +59,27 @@ export default function About() {
     setTranslatedText(text);
   };
 
+  // copy text
+  const copytext = (text) => {
+    navigator.clipboard.writeText(text);
+    showalert("copy text", "success");
+  };
+
+  // show alert
+  const showalert = (message, type) => {
+    setalert({
+      message: message,
+      type: type,
+    });
+    setTimeout(() => {
+      setalert(null);
+    }, 1500);
+  };
+
   return (
     <>
-      <div className="container mt-5">
+      <Alert alert={alert} />
+      <div className="container" style={{ marginTop: "70px" }}>
         <div className="d-flex mb-3 gap-3">
           <select
             className="form-select"
@@ -63,54 +87,70 @@ export default function About() {
             onChange={(e) => setInputLanguage(e.target.value)}
           >
             <option value="en">English</option>
-            {language.map((language, index) => (
-              <option key={index} value={language.code}>
-                {language["*"]}
+            {language.map((language) => (
+              <option key={language.language} value={language.language}>
+                {language.name}
               </option>
             ))}
           </select>
           <button
             type="button"
             onClick={replaceLanguage}
-            class="btn btn-outline-secondary opacity-75"
+            className="btn btn-outline-secondary opacity-75"
           >
-            <i class="bi bi-arrow-left-right"></i>{" "}
+            <i className="bi bi-arrow-left-right"></i>
           </button>
           <select
             className="form-select"
             value={selectedLanguage}
             onChange={(e) => setSelectedLanguage(e.target.value)}
           >
-            <option value="gu"> ગુજરાતી </option>
-            {language.map((language, index) => (
-              <option key={index} value={language.code}>
-                {language["*"]}
+            <option value="gu"> Gujarati </option>
+            {language.map((language) => (
+              <option key={language.language} value={language.language}>
+                {language.name}
               </option>
             ))}
           </select>
         </div>
 
         <div className="d-flex mb-3 gap-3">
-          <textarea
-            className="form-control "
-            placeholder="Enter Text."
-            rows="8"
-            value={text}
-            onChange={typeInput}
-          ></textarea>
-
-          <textarea
-            disabled
-            className="form-control"
-            placeholder="Translation"
-            rows="9"
-            value={translatedText}
-          ></textarea>
+          <div className="w-100 position-relative">
+            <textarea
+              className="form-control "
+              placeholder="Enter Text."
+              rows="8"
+              value={text}
+              onChange={typeInput}
+            ></textarea>
+            {inputLanguage !== "en" && (
+              <span onClick={clicksuggection} className="pointer position-absolute border px-4 bottom-0">
+                {inputfirstLanguage}
+              </span>
+            )}
+            <button
+              onClick={() => copytext(text)}
+              className="btn position-absolute  bottom-0 end-0 mb-2"
+            >
+              <i className="bi bi-copy"></i>
+            </button>
+          </div>
+          <div className="w-100 position-relative">
+            <textarea
+              disabled
+              className="form-control"
+              placeholder="Translation"
+              rows="8"
+              value={translatedText}
+            ></textarea>
+            <button
+              onClick={() => copytext(translatedText)}
+              className="btn position-absolute  bottom-0 end-0 mb-2"
+            >
+              <i className="bi bi-copy"></i>
+            </button>
+          </div>
         </div>
-
-        <span onClick={clicksuggection} className="curser-pointer">
-          {inputfirstLanguage}
-        </span>
 
         <button
           onClick={translateText}
