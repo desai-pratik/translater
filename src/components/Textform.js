@@ -37,7 +37,7 @@ export default function TextForm(props) {
 
   return (
     <>
-      <div className="container mt-5 mb-3">
+      <div className="container vh-100 mt-5 ">
         <h3>{props.heading}</h3>
         <div className="d-flex mb-3 gap-3">
           <textarea
@@ -66,10 +66,7 @@ export default function TextForm(props) {
           remove extra space
         </button>
        </div>
-      </div>
-
-      <div className="container">
-        <h3>Your Text summary</h3>
+        <h5 className="mt-5">Your Text Summary</h5>
         <p>
           {text.split(" ").length} words and {text.length} characters
         </p>

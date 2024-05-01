@@ -9,6 +9,7 @@ export default function About(props) {
   const [language, setLanguage] = useState([]);
   const [inputfirstLanguage, setInputfirstLanguage] = useState("");
   const [alert, setalert] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,6 +19,7 @@ export default function About(props) {
         const response = await fetch(url);
         const data = await response.json();
         setLanguage(data.data.languages);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -28,11 +30,13 @@ export default function About(props) {
 
   // translet button click
   const translateText = async () => {
+    setLoading(true);
     const response = await fetch(
       `https://api.mymemory.translated.net/get?q=${text}&langpair=${inputLanguage}|${selectedLanguage}`
     );
     const data = await response.json();
     setTranslatedText(data.responseData.translatedText);
+    setLoading(false);
   };
 
   // get input suggetion
@@ -76,10 +80,10 @@ export default function About(props) {
     }, 1500);
   };
 
-  return (
+  return loading ? (<h6 className="vh-100 mt-4 text-center">Loading...</h6>): (
     <>
       <Alert alert={alert} />
-      <div className="container" style={{ marginTop: "70px" }}>
+      <div className="container vh-100" style={{ marginTop: "70px" }}>
         <div className="d-flex mb-3 gap-3">
           <select
             className="form-select"
@@ -114,8 +118,8 @@ export default function About(props) {
           </select>
         </div>
 
-        <div className="d-flex mb-3 gap-3">
-          <div className="w-100 position-relative">
+        <div className="row mb-3">
+          <div className="col-sm-6 position-relative">
             <textarea
               className="form-control "
               placeholder="Enter Text."
@@ -130,12 +134,12 @@ export default function About(props) {
             )}
             <button
               onClick={() => copytext(text)}
-              className="btn position-absolute  bottom-0 end-0 mb-2"
+              className="btn position-absolute  bottom-0 end-0 mb-2 me-3"
             >
               <i className="bi bi-copy"></i>
             </button>
           </div>
-          <div className="w-100 position-relative">
+          <div className="col-sm-6 position-relative">
             <textarea
               disabled
               className="form-control"
@@ -145,7 +149,7 @@ export default function About(props) {
             ></textarea>
             <button
               onClick={() => copytext(translatedText)}
-              className="btn position-absolute  bottom-0 end-0 mb-2"
+              className="btn position-absolute  bottom-0 end-0 mb-2 me-3"
             >
               <i className="bi bi-copy"></i>
             </button>
