@@ -24,7 +24,6 @@ export default function About(props) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -80,7 +79,17 @@ export default function About(props) {
     }, 1500);
   };
 
-  return loading ? (<h6 className="vh-100 mt-4 text-center">Loading...</h6>): (
+  // speaker fanctionality
+  const speak = (sms) => {
+    let msg = new SpeechSynthesisUtterance();
+    msg.text = sms;
+    msg.lang='eng';
+    window.speechSynthesis.speak(msg);
+  };
+
+  return loading ? (
+    <h6 className="vh-100 mt-4 text-center">Loading...</h6>
+  ) : (
     <>
       <Alert alert={alert} />
       <div className="container vh-100" style={{ marginTop: "70px" }}>
@@ -128,7 +137,10 @@ export default function About(props) {
               onChange={typeInput}
             ></textarea>
             {inputLanguage !== "en" && (
-              <span onClick={clicksuggection} className="pointer position-absolute border px-4 bottom-0">
+              <span
+                onClick={clicksuggection}
+                className="pointer position-absolute border px-4 bottom-0"
+              >
                 {inputfirstLanguage}
               </span>
             )}
@@ -137,6 +149,12 @@ export default function About(props) {
               className="btn position-absolute  bottom-0 end-0 mb-2 me-3"
             >
               <i className="bi bi-copy"></i>
+            </button>
+            <button
+              onClick={() => speak(text)}
+              className="btn position-absolute bottom-0 p-1"
+            >
+              <i className="bi bi-volume-up fs-5"></i>
             </button>
           </div>
           <div className="col-sm-6 position-relative">
@@ -149,9 +167,15 @@ export default function About(props) {
             ></textarea>
             <button
               onClick={() => copytext(translatedText)}
-              className="btn position-absolute  bottom-0 end-0 mb-2 me-3"
+              className="btn position-absolute bottom-0 end-0 mb-2 me-3"
             >
               <i className="bi bi-copy"></i>
+            </button>
+            <button
+              onClick={() => speak(translatedText)}
+              className="btn position-absolute bottom-0 p-1"
+            >
+              <i className="bi bi-volume-up fs-5"></i>
             </button>
           </div>
         </div>
