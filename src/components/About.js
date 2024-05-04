@@ -21,7 +21,7 @@ export default function About(props) {
         setLanguage(data.data.languages);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        showalert(" Something is Wrong, Please Check Your Network.", "danger");
       }
     };
     fetchData();
@@ -29,23 +29,31 @@ export default function About(props) {
 
   // translet button click
   const translateText = async () => {
-    setLoading(true);
-    const response = await fetch(
-      `https://api.mymemory.translated.net/get?q=${text}&langpair=${inputLanguage}|${selectedLanguage}`
-    );
-    const data = await response.json();
-    setTranslatedText(data.responseData.translatedText);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://api.mymemory.translated.net/get?q=${text}&langpair=${inputLanguage}|${selectedLanguage}`
+      );
+      const data = await response.json();
+      setTranslatedText(data.responseData.translatedText);
+      setLoading(false);
+    } catch (error) {
+      showalert(" Something is Wrong, Please Check Your Network.", "danger");
+    }
   };
 
   // get input suggetion
   const typeInput = async (e) => {
-    setText(e.target.value);
-    const response = await fetch(
-      `https://api.mymemory.translated.net/get?q=${e.target.value}&langpair=en|${inputLanguage}`
-    );
-    const data = await response.json();
-    setInputfirstLanguage(data.responseData.translatedText);
+    try {
+      setText(e.target.value);
+      const response = await fetch(
+        `https://api.mymemory.translated.net/get?q=${e.target.value}&langpair=en|${inputLanguage}`
+      );
+      const data = await response.json();
+      setInputfirstLanguage(data.responseData.translatedText);
+    } catch (error) {
+      showalert(" Something is Wrong, Please Check Your Network.", "danger");
+    }
   };
 
   // click suggection
@@ -83,16 +91,19 @@ export default function About(props) {
   const speak = (sms) => {
     let msg = new SpeechSynthesisUtterance();
     msg.text = sms;
-    msg.lang='eng';
+    msg.lang = "eng";
     window.speechSynthesis.speak(msg);
   };
 
   return loading ? (
-    <h6 className="vh-100 mt-4 text-center">Loading...</h6>
+    <div>
+      <Alert alert={alert} />
+      <h6 className="vh-100 mt-4 text-center">Loading...</h6>
+    </div>
   ) : (
     <>
       <Alert alert={alert} />
-      <div className="container vh-100" style={{ marginTop: "70px" }}>
+      <div className="container " style={{ marginTop: "70px" }}>
         <div className="d-flex mb-3 gap-3">
           <select
             className="form-select"
@@ -100,11 +111,12 @@ export default function About(props) {
             onChange={(e) => setInputLanguage(e.target.value)}
           >
             <option value="en">English</option>
-            {language.map((language) => (
-              <option key={language.language} value={language.language}>
-                {language.name}
-              </option>
-            ))}
+            {language &&
+              language.map((language) => (
+                <option key={language.language} value={language.language}>
+                  {language.name}
+                </option>
+              ))}
           </select>
           <button
             type="button"
@@ -119,11 +131,12 @@ export default function About(props) {
             onChange={(e) => setSelectedLanguage(e.target.value)}
           >
             <option value="gu"> Gujarati </option>
-            {language.map((language) => (
-              <option key={language.language} value={language.language}>
-                {language.name}
-              </option>
-            ))}
+            {language &&
+              language.map((language) => (
+                <option key={language.language} value={language.language}>
+                  {language.name}
+                </option>
+              ))}
           </select>
         </div>
 

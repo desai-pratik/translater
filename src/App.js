@@ -6,6 +6,7 @@ import WordsTranslate from "./components/WordsTranslate";
 import About from "./components/About";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import Footer from "./components/Footer";
 
 const App = () => {
   const [mode, setmode] = useState("light"); 
@@ -39,6 +40,7 @@ const App = () => {
         mode={mode}
       />
       <Outlet/>
+      <Footer />
     </div>
   );
 };

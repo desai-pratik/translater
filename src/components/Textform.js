@@ -58,7 +58,7 @@ export default function TextForm(props) {
 
   return (
     <>
-      <div className="container vh-100 mt-5 ">
+      <div className="container mt-5 ">
         <div className="d-flex align-items-end justify-content-between">
           <h3>{props.heading}</h3>
           <input
